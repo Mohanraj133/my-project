@@ -52,6 +52,25 @@ pipeline {
             }
         }
     }
+    stage('Debug Environment') {
+    steps {
+        sh '''
+        echo "===== JAVA ====="
+        java -version
+
+        echo "===== MAVEN ====="
+        which mvn
+        mvn -version
+
+        echo "===== WORKSPACE ====="
+        pwd
+        ls -la
+
+        echo "===== POM FILES ====="
+        find . -name pom.xml
+        '''
+    }
+}
     stage('SonarQube Inspection') {
         steps {
             withSonarQubeEnv('SonarQube') { 
