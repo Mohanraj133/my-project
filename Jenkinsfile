@@ -78,8 +78,7 @@ pipeline {
             withCredentials([string(credentialsId: 'SonarQube-Token', variable: 'SONAR_TOKEN')]) {
                 sh 'echo "******** NEW JENKINSFILE ********"'
                 sh '''
-                mvn clean verify \
-                org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
+                mvn clean verify sonar:sonar \
                 -Dsonar.projectKey=JavaWebApp-Project \
                 -Dsonar.host.url=http://13.201.7.93:9000 \
                 -Dsonar.token=$SONAR_TOKEN
