@@ -15,6 +15,7 @@ pipeline {
     //NEXUS_REPOSITORY = "maven_project"
     //NEXUS_REPO_ID    = "maven_project"
     //ARTVERSION = "${env.BUILD_ID}"
+      
   }
   tools {
     maven 'localMaven'
@@ -72,19 +73,20 @@ pipeline {
     }
 }
     stage('SonarQube Inspection') {
-        steps {
-            withSonarQubeEnv('SonarQube') { 
-                withCredentials([string(credentialsId: 'SonarQube-Token', variable: 'SONAR_TOKEN')]) {
-                sh """
-                mvn clean verify sonar:sonar \
+    steps {
+        withSonarQubeEnv('SonarQube') {
+            withCredentials([string(credentialsId: 'SonarQube-Token', variable: 'SONAR_TOKEN')]) {
+                sh '''
+                mvn clean verify \
+                org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
                 -Dsonar.projectKey=JavaWebApp-Project \
                 -Dsonar.host.url=http://13.201.7.93:9000 \
-                -Dsonar.login=$SONAR_TOKEN
-                """
-                }
+                -Dsonar.token=$SONAR_TOKEN
+                '''
             }
         }
     }
+}
     stage('SonarQube GateKeeper') {
         steps {
           timeout(time : 1, unit : 'HOURS'){
