@@ -76,6 +76,7 @@ pipeline {
     steps {
         withSonarQubeEnv('SonarQube') {
             withCredentials([string(credentialsId: 'SonarQube-Token', variable: 'SONAR_TOKEN')]) {
+                sh 'echo "******** NEW JENKINSFILE ********"'
                 sh '''
                 mvn clean verify \
                 org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
