@@ -59,7 +59,7 @@ pipeline {
                 sh """
                 mvn sonar:sonar \
                 -Dsonar.projectKey=JavaWebApp-Project \
-                -Dsonar.host.url=http://172.31.19.82:9000 \
+                -Dsonar.host.url=http://13.201.7.93:9000 \
                 -Dsonar.login=$SONAR_TOKEN
                 """
                 }
@@ -73,12 +73,12 @@ pipeline {
           }
        }
     }
-    stage("Nexus Artifact Uploader"){
+    stage("docker Artifact Uploader"){
         steps{
            nexusArtifactUploader(
               nexusVersion: 'nexus3',
               protocol: 'http',
-              nexusUrl: '172.31.38.223:8081',
+              nexusUrl: 'hub.docker.com',
               groupId: 'webapp',
               version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
               repository: 'maven-project-releases',  //"${NEXUS_REPOSITORY}",
@@ -131,8 +131,6 @@ pipeline {
   post {
     always {
         echo 'Slack Notifications.'
-        slackSend channel: '#mk-cicd-pipeline-alerts', //update and provide your channel name
-        color: COLOR_MAP[currentBuild.currentResult],
         message: "*${currentBuild.currentResult}:* Job Name '${env.JOB_NAME}' build ${env.BUILD_NUMBER} \n Build Timestamp: ${env.BUILD_TIMESTAMP} \n Project Workspace: ${env.WORKSPACE} \n More info at: ${env.BUILD_URL}"
     }
   }
