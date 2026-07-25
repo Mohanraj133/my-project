@@ -7,7 +7,7 @@ def COLOR_MAP = [
 pipeline {
   agent any
   environment {
-    WORKSPACE = "${env.WORKSPACE}"
+   // WORKSPACE = "${env.WORKSPACE}"
     NEXUS_CREDENTIAL_ID = 'Nexus-Credential'
     //NEXUS_USER = "$NEXUS_CREDS_USR"
     //NEXUS_PASSWORD = "$Nexus-Token"
@@ -128,11 +128,5 @@ pipeline {
          }
       }
    }
-  post {
-    always {
-        echo 'Slack Notifications.'
-        message: "*${currentBuild.currentResult}:* Job Name '${env.JOB_NAME}' build ${env.BUILD_NUMBER} \n Build Timestamp: ${env.BUILD_TIMESTAMP} \n Project Workspace: ${env.WORKSPACE} \n More info at: ${env.BUILD_URL}"
-    }
-  }
 }
 
